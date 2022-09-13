@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CreditController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Credit</a> &gt; <a href="index.source.html" class="el_package">Credit.controller</a> &gt; <span class="el_source">CreditController.java</span></div><h1>CreditController.java</h1><pre class="source lang-java linenums">package Credit.controller;
+
+import Credit.dto.Creditdto;
+import Credit.model.Client;
+import Credit.model.Credit;
+import Credit.service.ICreditService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+@RestController
+@RequestMapping(&quot;/api/credit&quot;)
+<span class="fc" id="L19">public class CreditController {</span>
+<span class="fc" id="L20">    private static final Logger logger = LoggerFactory.getLogger(CreditController.class);</span>
+    @Autowired
+    private ICreditService service;
+    @GetMapping
+    public ResponseEntity&lt;Flux&lt;Credit&gt;&gt; list(){
+<span class="nc" id="L25">        logger.info(&quot;Inicio metodo list() de CreditController&quot;);</span>
+<span class="nc" id="L26">        Flux&lt;Credit&gt; lista = null;</span>
+<span class="nc" id="L27">        String documentNumberClient =&quot;75399757&quot;;</span>
+<span class="nc" id="L28">        Flux&lt;Credit&gt; credito =service.list().filter(a-&gt;a.equals(a.getClient().getDocumentNumber().equals(documentNumberClient)));</span>
+<span class="nc" id="L29">        credito.subscribe(System.out::println);</span>
+        try {
+<span class="nc" id="L31">            lista = service.list();</span>
+
+<span class="nc" id="L33">        } catch (Exception e) {</span>
+<span class="nc" id="L34">            logger.info(&quot;Ocurrio un error &quot; + e.getMessage());</span>
+
+        }finally {
+<span class="nc" id="L37">            logger.info( &quot;Fin metodo list() de CreditController&quot;);</span>
+        }
+<span class="nc" id="L39">        return new ResponseEntity&lt;Flux&lt;Credit&gt;&gt;(lista, HttpStatus.OK);</span>
+    }
+
+
+    @PostMapping
+    public ResponseEntity&lt;Mono&lt;Credit&gt;&gt; register(@RequestBody Creditdto creditdto){
+<span class="nc" id="L45">        logger.info(&quot;Inicio metodo register() de CreditController&quot;);</span>
+<span class="nc" id="L46">        Client client = Client.builder()</span>
+<span class="nc" id="L47">                .idClient(creditdto.getIdClient())</span>
+<span class="nc" id="L48">                .documentNumber(creditdto.getDocumentNumber())</span>
+<span class="nc" id="L49">                .build();</span>
+<span class="nc" id="L50">        Credit credit = Credit.builder()</span>
+<span class="nc" id="L51">                .creditCardNumber(creditdto.getCreditCardNumber())</span>
+<span class="nc" id="L52">                .creditLine(creditdto.getCreditLine())</span>
+<span class="nc" id="L53">                .client(client)</span>
+<span class="nc" id="L54">                .build();</span>
+<span class="nc" id="L55">        Mono&lt;Credit&gt; p = service.register(credit);</span>
+
+<span class="nc" id="L57">        return new ResponseEntity&lt;Mono&lt;Credit&gt;&gt;(p, HttpStatus.CREATED);</span>
+    }
+    @DeleteMapping(&quot;/{id}&quot;)
+    public Mono&lt;ResponseEntity&lt;Void&gt;&gt; delete(@PathVariable(&quot;id&quot;) String id) {
+<span class="nc" id="L61">        logger.info(&quot;Inicio metodo delete() de CreditController&quot;);</span>
+<span class="nc" id="L62">        return service.delete(id).map(r-&gt;ResponseEntity.ok().&lt;Void&gt;build()).defaultIfEmpty(ResponseEntity.notFound().build());</span>
+    }
+    @PutMapping
+    public ResponseEntity&lt;Mono&lt;Credit&gt;&gt; update(@RequestBody Credit credit){
+<span class="nc" id="L66">        logger.info(&quot;Inicio metodo update() de CreditController&quot;);</span>
+<span class="nc" id="L67">        Mono&lt;Credit&gt; p = null;</span>
+        try {
+<span class="nc" id="L69">            p = service.modify(credit);</span>
+
+<span class="nc" id="L71">        } catch (Exception e) {</span>
+<span class="nc" id="L72">            logger.info(&quot;Ocurrio un error &quot; + e.getMessage());</span>
+
+        }finally {
+<span class="nc" id="L75">            logger.info( &quot;Fin metodo update() de CreditController&quot;);</span>
+        }
+<span class="nc" id="L77">        return new ResponseEntity&lt;Mono&lt;Credit&gt;&gt;(p, HttpStatus.OK);</span>
+    }
+    @CircuitBreaker(name=&quot;credit&quot;, fallbackMethod = &quot;fallBackGetCredit&quot;)
+    @GetMapping(&quot;/documentNumber/{documentNumber}&quot;)
+    public ResponseEntity&lt;Flux&lt;Credit&gt;&gt; listCreditByDocumentNumberClient(@PathVariable(&quot;documentNumber&quot;) String documentNumber){
+<span class="nc" id="L82">        logger.info(&quot;Inicio metodo listCreditByDocumentNumberClient() de CreditController&quot;);</span>
+<span class="nc" id="L83">        Flux&lt;Credit&gt; credit = service.listCreditByDocumentNumberClient(documentNumber);</span>
+
+<span class="nc" id="L85">        return new ResponseEntity&lt;Flux&lt;Credit&gt;&gt;(credit, HttpStatus.OK);</span>
+    }
+    @CircuitBreaker(name=&quot;credit&quot;, fallbackMethod = &quot;fallBackGetCredit&quot;)
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Mono&lt;Credit&gt;&gt; listCreditById(@PathVariable(&quot;id&quot;) String id){
+<span class="nc" id="L90">        logger.info(&quot;Inicio metodo listCreditById() de CreditController&quot;);</span>
+<span class="nc" id="L91">        Mono&lt;Credit&gt; credit = service.listofId(id);</span>
+<span class="nc" id="L92">        logger.info(&quot;FIN metodo listCreditById() de CreditController&quot;);</span>
+<span class="nc" id="L93">        return new ResponseEntity&lt;Mono&lt;Credit&gt;&gt;(credit, HttpStatus.OK);</span>
+    }
+    public ResponseEntity&lt;Mono&lt;Credit&gt;&gt; fallBackGetCredit(String documentNumber, RuntimeException runtimeException){
+<span class="nc" id="L96">        return new ResponseEntity(&quot;Microservicio Credit no funciona&quot;,HttpStatus.OK);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

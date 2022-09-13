@@ -1,0 +1,12 @@
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\repo\ICreditRepo.java
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\dto\Creditdto.java
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\exception\ModelNotFoundException.java
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\config\WebClientConfig.java
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\service\ICRUD.java
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\controller\CreditController.java
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\model\Credit.java
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\model\TypeClient.java
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\service\ICreditService.java
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\service\impl\CreditServiceImpl.java
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\CreditApplication.java
+D:\Documents\CURSOS NTTDATA\Microservicios\Ejercicios de practica\Api separadas\Credit\src\main\java\Credit\model\Client.java

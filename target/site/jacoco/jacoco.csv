@@ -1,0 +1,14 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Credit,Credit.model,Client.ClientBuilder,16,56,0,0,0,1,1,9,1,9
+Credit,Credit.model,TypeClient,138,33,30,0,1,6,22,6,7,6
+Credit,Credit.model,Credit.CreditBuilder,10,35,0,0,0,1,1,6,1,6
+Credit,Credit.model,TypeClient.TypeClientBuilder,8,28,0,0,0,1,1,5,1,5
+Credit,Credit.model,Credit,189,25,38,0,4,4,30,4,11,4
+Credit,Credit.model,Client,278,65,62,0,1,10,42,10,11,10
+Credit,Credit,CreditApplication,5,3,0,0,2,1,1,1,1,1
+Credit,Credit.exception,ModelNotFoundException,4,0,0,0,2,0,1,0,1,0
+Credit,Credit.service.impl,CreditServiceImpl,147,33,6,0,30,8,10,7,7,7
+Credit,Credit.dto,Creditdto.CreditdtoBuilder,45,0,0,0,1,0,7,0,7,0
+Credit,Credit.dto,Creditdto,214,0,38,0,8,0,34,0,15,0
+Credit,Credit.controller,CreditController,162,7,0,0,39,2,9,2,9,2
+Credit,Credit.config,WebClientConfig,151,0,24,0,11,0,24,0,12,0

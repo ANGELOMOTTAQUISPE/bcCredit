@@ -19,6 +19,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -44,12 +47,14 @@ class CreditServiceImplTest {
     private Mono<Client> clientMono;
     @BeforeEach
     void ini(){
-        typeclient= TypeClient.builder().clientType("empresarial").profile("pyme").build();
-        client =Client.builder().idClient("1").name("PEPITO SAC").documentNumber("21458963256").documentType("RUC").typeClient(typeclient).build();
+        List<String> typclient=new ArrayList<>();
+        typclient.add("empresarial");
+        typeclient= TypeClient.builder().clientType(typclient).profile("pyme").imei("123").build();
+        client =Client.builder().idClient("1").name("PEPITO SAC").documentNumber("21458963256").documentType("RUC").phoneNumber("789789789").email("pepito@gmail.com").typeClient(typeclient).build(); ;
         creditMono = Mono.just(new Credit("1","4567-7894-7894-7894",200.00,client));
         creditflux = Flux.just(new Credit("1","4567-7894-7894-7894",200.00,client));
         credit = Credit.builder().idCredit("1").creditCardNumber("4567-7894-7894-7894").creditLine(200.00).client(client).build();
-        clientMono = Mono.just(new Client("1", "PEPITO SAC", "21458963256", "RUC", new TypeClient( "empresarial", "pyme") ));
+        clientMono = Mono.just(new Client("1", "PEPITO SAC", "21458963256", "RUC","789789789","pepito@gmail.com", new TypeClient(typclient, "pyme","123") ));
     }
     @Test
     void findByApiClient() {
